@@ -1,0 +1,1 @@
+# NC Kafka fundamentals
