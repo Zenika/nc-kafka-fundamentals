@@ -1,14 +1,14 @@
 version: '3.5'
 services:
   connect:
-    build: 'confluentinc/cp-kafka-connect:${version_confluent}'
+    image: 'confluentinc/cp-kafka-connect:${version_confluent}'
     hostname: connect
     restart: always
     container_name: connect
     ports:
       - 8083:8083
     networks:
-      - confluent
+      - tz-kafka-network
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_GROUP_ID: "connect"
@@ -35,3 +35,8 @@ services:
       CONNECT_TOPIC_CREATION_ENABLE: "true"
       CONNECT_KEY_CONVERTER_AUTO_REGISTRY_SCHEMAS: "true"
       CONNECT_VALUE_CONVERTER_AUTO_REGISTRY_SCHEMAS: "true"
+
+networks:
+  tz-kafka-network:
+    external:
+      name: tz-kafka-network

@@ -12,3 +12,8 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:9092'
       SCHEMA_REGISTRY_LISTENERS: 'http://schema-registry:8081'
+
+networks:
+  tz-kafka-network:
+    external:
+      name: tz-kafka-network

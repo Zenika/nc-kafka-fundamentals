@@ -1,26 +1,25 @@
-package com.zenika.kafka.producer.service;
+package com.zenika.kafka.producer.service.template;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.Duration;
 import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
-public class Subscriber implements MqttCallback {
+public class SubscriberWithTemplate implements MqttCallback {
 
     private static final int QOS = 1;
     private static final String HOST = "ssl://mqtt.hsl.fi:8883";
     private static final String CLIENT_ID = "MQTT-Java-Example";
     private static final String TOPIC = "/hfp/v2/journey/ongoing/vp/#";
 
-    private final Producer<String, String> producer;
+    private final KafkaTemplate<String, String> template;
     private final Duration waitingTime;
     private final String kafkaTopic;
 
@@ -58,10 +57,11 @@ public class Subscriber implements MqttCallback {
 
     @SneakyThrows
     public void messageArrived(String topic, MqttMessage message) {
+        // Here topic is topic mqtt
         log.info("[{}] {}", topic, new String(message.getPayload()));
-        final String value = new String(message.getPayload());
-        final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, topic, value);
-        producer.send(record);
+        // No need producer record
+        // Here topic is topic mqtt
+        template.send(kafkaTopic, topic, new String(message.getPayload()));
         Thread.sleep(this.waitingTime.toMillis());
     }
 }

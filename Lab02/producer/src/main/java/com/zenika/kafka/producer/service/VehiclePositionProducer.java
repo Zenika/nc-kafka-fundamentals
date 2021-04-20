@@ -1,30 +1,39 @@
 package com.zenika.kafka.producer.service;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.Properties;
+import javax.annotation.PostConstruct;
+import java.time.Duration;
 
+@Service
+@RequiredArgsConstructor
+@Profile("!kafka-template")
 public class VehiclePositionProducer {
-    public static void main(String[] args) throws MqttException {
-        System.out.println("*** Starting VP Producer ***");
 
-        Properties settings = new Properties();
-        settings.put(ProducerConfig.CLIENT_ID_CONFIG, "vp-producer");
-        settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
-        settings.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        settings.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+    private final ProducerFactory<String, String> producerFactory;
 
-        final KafkaProducer<String, String> producer = new KafkaProducer<>(settings);
-        
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("### Stopping VP Producer ###");
-            producer.close();
-        }));
-        
-        Subscriber subscriber = new Subscriber(producer);
+    @Value("${application.waiting-time}")
+    private Duration waitingTime;
+
+    @Value("${application.topic}")
+    private String topic;
+
+    @PostConstruct
+    public void initSubscription() {
+        Subscriber subscriber = new Subscriber(producerFactory.createProducer(), waitingTime, topic);
         subscriber.start();
     }
+//        ProducerFactory from spring-kafka is similar to :
+//
+//        Properties settings = new Properties();
+//        settings.put(ProducerConfig.CLIENT_ID_CONFIG, "vp-producer");
+//        settings.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+//        settings.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//        settings.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//
+//        final KafkaProducer<String, String> producer = new KafkaProducer<>(settings);
 }
