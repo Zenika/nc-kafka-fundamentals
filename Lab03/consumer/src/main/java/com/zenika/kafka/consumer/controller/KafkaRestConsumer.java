@@ -1,4 +1,4 @@
-package com.zenika.kafka.producer.controller;
+package com.zenika.kafka.consumer.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +22,12 @@ import java.util.concurrent.Executors;
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaRestConsumer {
+    private final ConsumerFactory<String, String> kafkaConsumerFactory;
+    private final ExecutorService sseExecutorService = Executors.newCachedThreadPool();
     @Value("${application.waiting-time}")
     private Duration waitingTime;
     @Value("${application.topic}")
     private String topic;
-
-    private final ConsumerFactory<String, String> kafkaConsumerFactory;
-    private final ExecutorService sseExecutorService = Executors.newCachedThreadPool();
 
     @GetMapping("/consume")
     public SseEmitter consume() {
@@ -36,7 +35,7 @@ public class KafkaRestConsumer {
         SseEmitter emitter = new SseEmitter(0L);
         sseExecutorService.execute(
                 () -> {
-                    KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) kafkaConsumerFactory.createConsumer("kafka-consumer-vp", "example-spring-kafka");
+                    KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) kafkaConsumerFactory.createConsumer();
                     emitter.onCompletion(consumer::close);
                     consumer.subscribe(Collections.singletonList(topic));
                     boolean exitLoop = false;

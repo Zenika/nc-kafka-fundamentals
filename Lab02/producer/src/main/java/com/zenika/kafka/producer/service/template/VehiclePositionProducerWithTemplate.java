@@ -7,7 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -16,15 +15,13 @@ public class VehiclePositionProducerWithTemplate {
 
     private final KafkaTemplate<String, String> template;
 
-    @Value("${application.waiting-time}")
-    private Duration waitingTime;
 
     @Value("${application.topic}")
     private String topic;
 
     @PostConstruct
     public void initSubscription() {
-        SubscriberWithTemplate subscriberWithTemplate = new SubscriberWithTemplate(template, waitingTime, topic);
+        SubscriberWithTemplate subscriberWithTemplate = new SubscriberWithTemplate(template, topic);
         subscriberWithTemplate.start();
     }
 }

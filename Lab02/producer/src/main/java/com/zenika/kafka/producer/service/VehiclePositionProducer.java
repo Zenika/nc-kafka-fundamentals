@@ -16,15 +16,12 @@ public class VehiclePositionProducer {
 
     private final ProducerFactory<String, String> producerFactory;
 
-    @Value("${application.waiting-time}")
-    private Duration waitingTime;
-
     @Value("${application.topic}")
     private String topic;
 
     @PostConstruct
     public void initSubscription() {
-        Subscriber subscriber = new Subscriber(producerFactory.createProducer(), waitingTime, topic);
+        Subscriber subscriber = new Subscriber(producerFactory.createProducer(), topic);
         subscriber.start();
     }
 //        ProducerFactory from spring-kafka is similar to :

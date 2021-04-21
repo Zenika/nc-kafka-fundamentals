@@ -1,4 +1,4 @@
-package com.zenika.kafka.producer;
+package com.zenika.kafka.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

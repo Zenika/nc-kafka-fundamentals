@@ -1,4 +1,4 @@
-package com.zenika.kafka.producer.service;
+package com.zenika.kafka.consumer.service;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ public class KafkaListenerConsumer {
     private Duration waitingTime;
 
     @SneakyThrows
-    @KafkaListener(topics = "${application.topic}", groupId = "example-spring-listener")
+    @KafkaListener(topics = "${application.topic}", groupId = "custom-spring-listener-group-id")
     public void consume(String message) {
         log.info(String.format("#### -> Consumed message with the easy listener -> %s", message));
         Thread.sleep(waitingTime.toMillis());

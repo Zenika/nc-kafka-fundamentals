@@ -7,7 +7,6 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.time.Duration;
 import java.util.UUID;
 
 @Slf4j
@@ -20,13 +19,13 @@ public class SubscriberWithTemplate implements MqttCallback {
     private static final String TOPIC = "/hfp/v2/journey/ongoing/vp/#";
 
     private final KafkaTemplate<String, String> template;
-    private final Duration waitingTime;
     private final String kafkaTopic;
 
 
     public void start() {
         final MqttConnectOptions conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
+        conOpt.setMaxInflight(1);
 
         final String uuid = UUID.randomUUID().toString().replace("-", "");
 
@@ -55,13 +54,11 @@ public class SubscriberWithTemplate implements MqttCallback {
         log.info("DeliveryComplete");
     }
 
-    @SneakyThrows
     public void messageArrived(String topic, MqttMessage message) {
         // Here topic is topic mqtt
         log.info("[{}] {}", topic, new String(message.getPayload()));
         // No need producer record
         // Here topic is topic mqtt
         template.send(kafkaTopic, topic, new String(message.getPayload()));
-        Thread.sleep(this.waitingTime.toMillis());
     }
 }
