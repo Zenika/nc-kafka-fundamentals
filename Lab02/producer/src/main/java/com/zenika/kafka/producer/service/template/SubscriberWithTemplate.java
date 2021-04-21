@@ -1,7 +1,6 @@
 package com.zenika.kafka.producer.service.template;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -51,12 +50,12 @@ public class SubscriberWithTemplate implements MqttCallback {
     }
 
     public void deliveryComplete(IMqttDeliveryToken token) {
-        log.info("DeliveryComplete");
+        log.info("DeliveryComplete token:{}", token);
     }
 
     public void messageArrived(String topic, MqttMessage message) {
         // Here topic is topic mqtt
-        log.info("[{}] {}", topic, new String(message.getPayload()));
+        log.info("[{}] {}", topic, message.getPayload());
         // No need producer record
         // Here topic is topic mqtt
         template.send(kafkaTopic, topic, new String(message.getPayload()));

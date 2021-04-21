@@ -1,4 +1,4 @@
-package com.zenika.kafka.consumer;
+package com.zenika.kafka.requestreply;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class ConsumerApplication {
+public class RequestReplyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ConsumerApplication.class, args);
+        SpringApplication.run(RequestReplyApplication.class, args);
     }
 
 }

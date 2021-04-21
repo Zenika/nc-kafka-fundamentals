@@ -1,6 +1,11 @@
 package com.zenika.kafka.producer.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zenika.kafka.common.model.PositionKey;
+import com.zenika.kafka.common.model.PositionValue;
+import com.zenika.kafka.producer.model.VehiclePositionJson;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -15,10 +20,10 @@ public class Subscriber implements MqttCallback {
 
     private static final int QOS = 1;
     private static final String HOST = "ssl://mqtt.hsl.fi:8883";
-    private static final String CLIENT_ID = "MQTT-Java-Example";
+    private static final String CLIENT_ID = "MQTT-Java-Example-Avro";
     private static final String TOPIC = "/hfp/v2/journey/ongoing/vp/#";
 
-    private final Producer<String, String> producer;
+    private final Producer<PositionKey, PositionValue> producer;
     private final String kafkaTopic;
 
 
@@ -54,10 +59,25 @@ public class Subscriber implements MqttCallback {
         log.info("DeliveryComplete token:{}", token);
     }
 
+
     public void messageArrived(String topic, MqttMessage message) {
         log.info("[{}] {}", topic, message.getPayload());
-        final String value = new String(message.getPayload());
-        final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, topic, value);
+        final PositionValue value = getPositionValue(message.getPayload());
+        final PositionKey key = new PositionKey(topic);
+        final ProducerRecord<PositionKey, PositionValue> record = new ProducerRecord<>(kafkaTopic, key, value);
         producer.send(record);
+    }
+
+    @SneakyThrows
+    private PositionValue getPositionValue(byte[] payload) {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = new String(payload);
+        VehiclePositionJson pos = mapper.readValue(json, VehiclePositionJson.class);
+        VehiclePositionJson.VehicleValuesJson vv = pos.VP;
+
+        return new PositionValue(vv.desi, vv.dir, vv.oper, vv.veh, vv.tst,
+                vv.tsi, vv.spd, vv.hdg, vv.lat, vv.longitude, vv.acc, vv.dl,
+                vv.odo, vv.drst, vv.oday, vv.jrn, vv.line, vv.start, vv.loc,
+                vv.stop, vv.route, vv.occu, vv.seq);
     }
 }

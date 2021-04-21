@@ -105,7 +105,7 @@
         // when you get a message from the node socket.io server
         ev.onmessage = event => {
             console.log('Event send', event);
-            let data = JSON.parse(event.data).VP;
+            let data = JSON.parse(event.data);
             if(data.long && data.lat){
                 let key = data.oper + data.veh;
                 if (!(key in driverMarkers)) {
