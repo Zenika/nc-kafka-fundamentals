@@ -58,7 +58,8 @@ public class VPKStream {
         // read avro partition
         final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
                 Pattern.compile(inputTopic),
-                Consumed.with(positionKeySerde(), positionValueSerde())
+                Consumed.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                        SerdesBuilder.build(schemaRegistryUrl, false))
         );
 
         // Apply filter operation on oper (22 Nobina Finland Oy) citeria
@@ -67,7 +68,9 @@ public class VPKStream {
         );
 
         // Output data
-        filter.to(outputFilteredTopic, Produced.with(positionKeySerde(), positionValueSerde()));
+        filter.to(outputFilteredTopic, Produced.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                SerdesBuilder.build(schemaRegistryUrl, false))
+        );
 
         // print topology
         printTopology(builder.build());
@@ -87,7 +90,9 @@ public class VPKStream {
         // read avro partition
         final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
                 Pattern.compile(inputTopic),
-                Consumed.with(positionKeySerde(), positionValueSerde())
+                Consumed.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                        SerdesBuilder.build(schemaRegistryUrl, false)
+                )
         );
 
         // Apply mapping to LightPositionValue
@@ -101,7 +106,9 @@ public class VPKStream {
         );
 
         // Output data
-        filter.to(outputLightTopic, Produced.with(positionKeySerde(), lightPositionValueSerde()));
+        filter.to(outputLightTopic, Produced.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                SerdesBuilder.build(schemaRegistryUrl, false))
+        );
 
         // print topology
         printTopology(builder.build());
@@ -122,30 +129,6 @@ public class VPKStream {
         log.info("Stopping Kafka Streams...");
         filterKStreams.close();
         mappingKStreams.close();
-    }
-
-    private SpecificAvroSerde<PositionKey> positionKeySerde() {
-        final SpecificAvroSerde<PositionKey> serde = new SpecificAvroSerde<>();
-        Map<String, String> config = new HashMap<>();
-        config.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
-        serde.configure(config, true);
-        return serde;
-    }
-
-    private SpecificAvroSerde<PositionValue> positionValueSerde() {
-        final SpecificAvroSerde<PositionValue> serde = new SpecificAvroSerde<>();
-        Map<String, String> config = new HashMap<>();
-        config.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
-        serde.configure(config, false);
-        return serde;
-    }
-
-    private SpecificAvroSerde<LightPositionValue> lightPositionValueSerde() {
-        final SpecificAvroSerde<LightPositionValue> serde = new SpecificAvroSerde<>();
-        Map<String, String> config = new HashMap<>();
-        config.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
-        serde.configure(config, false);
-        return serde;
     }
 
     private Properties buildProperties(String streamName) {
