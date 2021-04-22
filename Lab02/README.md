@@ -15,7 +15,7 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
 
 - Checker dans akhq que des messages sont produits
 
-- Pour builder et démarrer le docker container 
+- Pour builder et démarrer le container 
 
 ```console
 docker build -t vp-producer .

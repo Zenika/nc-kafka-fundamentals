@@ -15,3 +15,10 @@
 - Faire la démo avec le front http://localhost:8091
 
 - Expliquer, jouer avec le wait, expliquer lag dans akhq, montrer le topic __consumer_offset
+
+- Pour builder et démarrer le container 
+
+```console
+docker build -t vp-consumer .
+docker run --name vp-consumer --network=tz-kafka-network -d vp-consumer
+```

@@ -18,3 +18,9 @@ docker-compose -f docker-compose-schema.yml up -d
 
 - Quel code à compléter pour le live coding ?
 
+- Pour builder et démarrer le container 
+
+```console
+docker build -t vp-avro-producer .
+docker run --name vp-avro-producer --network=tz-kafka-network -d vp-avro-producer
+```
