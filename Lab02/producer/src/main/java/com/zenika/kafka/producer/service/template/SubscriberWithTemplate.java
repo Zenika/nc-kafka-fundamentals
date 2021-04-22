@@ -45,19 +45,25 @@ public class SubscriberWithTemplate implements MqttCallback {
 
     }
 
+    @Override
     public void connectionLost(Throwable cause) {
         log.error("Connection lost", cause);
     }
 
+    @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         log.info("DeliveryComplete token:{}", token);
     }
 
+    @Override
     public void messageArrived(String topic, MqttMessage message) {
+        final String value = new String(message.getPayload());
+
         // Here topic is topic mqtt
-        log.info("[{}] {}", topic, message.getPayload());
+        log.info("Message arrived: [{}] {}", topic, value);
+
         // No need producer record
         // Here topic is topic mqtt
-        template.send(kafkaTopic, topic, new String(message.getPayload()));
+        template.send(kafkaTopic, topic, value);
     }
 }

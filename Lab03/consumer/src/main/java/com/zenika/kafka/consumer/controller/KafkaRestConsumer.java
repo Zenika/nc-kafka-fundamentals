@@ -33,15 +33,14 @@ public class KafkaRestConsumer {
     public SseEmitter consume() {
         log.debug("REST request to consume records from Kafka topic");
         SseEmitter emitter = new SseEmitter(0L);
-        sseExecutorService.execute(
-                () -> {
+        sseExecutorService.execute(() -> {
                     KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) kafkaConsumerFactory.createConsumer();
                     emitter.onCompletion(consumer::close);
                     consumer.subscribe(Collections.singletonList(topic));
                     boolean exitLoop = false;
                     while (!exitLoop) {
                         try {
-                            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
+                            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
                             for (ConsumerRecord<String, String> record : records) {
                                 emitter.send(record.value());
                                 // waiting to avoid lag on front page

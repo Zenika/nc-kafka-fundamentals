@@ -21,7 +21,6 @@ public class Subscriber implements MqttCallback {
     private final Producer<String, String> producer;
     private final String kafkaTopic;
 
-
     public void start() {
         final MqttConnectOptions conOpt = new MqttConnectOptions();
         conOpt.setCleanSession(true);
@@ -46,17 +45,20 @@ public class Subscriber implements MqttCallback {
 
     }
 
+    @Override
     public void connectionLost(Throwable cause) {
         log.error("Connection lost", cause);
     }
 
+    @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
         log.info("DeliveryComplete token:{}", token);
     }
 
+    @Override
     public void messageArrived(String topic, MqttMessage message) {
-        log.info("[{}] {}", topic, message.getPayload());
         final String value = new String(message.getPayload());
+        log.info("Message arrived: [{}] {}", topic, value);
         final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, topic, value);
         producer.send(record);
     }

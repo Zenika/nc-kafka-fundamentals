@@ -18,13 +18,14 @@ public class KafkaConfigListener {
     @Value("${application.topic}")
     private String topic;
 
-
     // Boot will autowire this into the container factory.
-    // An error handler that seeks to the current offset for each topic in the remaining records. Used to rewind partitions after a message failure so that it can be replayed.
+    // An error handler that seeks to the current offset for each topic in the remaining records.
+    // Used to rewind partitions after a message failure so that it can be replayed.
     @Bean
     public SeekToCurrentErrorHandler errorHandler(KafkaOperations<Object, Object> template) {
         return new SeekToCurrentErrorHandler(
-                new DeadLetterPublishingRecoverer(template), new FixedBackOff(5000L, 2));
+                new DeadLetterPublishingRecoverer(template), new FixedBackOff(5000L, 2)
+        );
     }
 
     // Create  DLT topic
