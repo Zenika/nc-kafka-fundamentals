@@ -1,7 +1,7 @@
 {
   "namespace": "com.zenika.kafka.common.model",
   "type": "record",
-  "name": "PositionValue",
+  "name": "LightPositionValue",
   "fields": [
     {
       "name": "oper",

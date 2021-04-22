@@ -1,8 +1,8 @@
 package com.zenika.kafka.kstream;
 
+import com.zenika.kafka.common.model.LightPositionValue;
 import com.zenika.kafka.common.model.PositionKey;
 import com.zenika.kafka.common.model.PositionValue;
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -45,7 +45,8 @@ public class VPKStream {
     @Value("${application.output-light-topic}")
     private String outputLightTopic;
 
-    private KafkaStreams kafkaStreams;
+    private KafkaStreams filterKStreams;
+    private KafkaStreams mappingKStreams;
 
     @PostConstruct
     public void startFilterStream() {
@@ -57,67 +58,97 @@ public class VPKStream {
         // read avro partition
         final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
                 Pattern.compile(inputTopic),
-                Consumed.with(
-                        positionKeySerde(buildProperties()),
-                        positionValueSerde(buildProperties())
-                )
+                Consumed.with(positionKeySerde(), positionValueSerde())
         );
 
         // Apply filter operation on oper (22 Nobina Finland Oy) citeria
         KStream<PositionKey, PositionValue> filter = avroToAvroStream.filter(
                 (readOnlyKey, value) -> value.getOper() == 22
-//                (readOnlyKey, value) -> true
         );
 
         // Output data
-        filter.to(outputFilteredTopic, Produced.with(
-                positionKeySerde(buildProperties()),
-                positionValueSerde(buildProperties()))
-        );
+        filter.to(outputFilteredTopic, Produced.with(positionKeySerde(), positionValueSerde()));
 
         // print topology
         printTopology(builder.build());
 
-        kafkaStreams = new KafkaStreams(builder.build(), buildProperties());
-        kafkaStreams.start();
+        filterKStreams = new KafkaStreams(builder.build(), buildProperties("filter"));
+        filterKStreams.start();
 
         log.info("Kafka Filtering Streams is started.");
-
-        // 2 - map on Light position value
-        //        KStream<String, PositionValue> map = avroToAvroStream.mapValues((readOnlyKey, value) -> {
-//            return new PositionValue();
-//        });
-
-        // 3 - last data for all oper with compaction topic (bonus)
-        // create ktable with last positions
-        // expose KTable with REst
-
     }
+
+    @PostConstruct
+    public void startLightMappingStream() {
+        log.info("Starting Light Mapping Kafka Streams");
+
+        final StreamsBuilder builder = new StreamsBuilder();
+
+        // read avro partition
+        final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
+                Pattern.compile(inputTopic),
+                Consumed.with(positionKeySerde(), positionValueSerde())
+        );
+
+        // Apply mapping to LightPositionValue
+        KStream<PositionKey, LightPositionValue> filter = avroToAvroStream.mapValues(
+                (readOnlyKey, value) -> LightPositionValue.newBuilder()
+                        .setLine(value.getLine())
+                        .setOper(value.getOper())
+                        .setLat(value.getLat())
+                        .setLong$(value.getLong$())
+                        .build()
+        );
+
+        // Output data
+        filter.to(outputLightTopic, Produced.with(positionKeySerde(), lightPositionValueSerde()));
+
+        // print topology
+        printTopology(builder.build());
+
+        mappingKStreams = new KafkaStreams(builder.build(), buildProperties("mapping"));
+        mappingKStreams.start();
+
+        log.info("Kafka Light Mapping Streams is started.");
+    }
+
+
+    // 3 - last data for all oper with compaction topic (bonus)
+    // create ktable with last positions
+    // expose KTable with REst
 
     @PreDestroy
     public void onStop() {
         log.info("Stopping Kafka Streams...");
-        kafkaStreams.close();
+        filterKStreams.close();
+        mappingKStreams.close();
     }
 
-    private SpecificAvroSerde<PositionKey> positionKeySerde(final Properties envProps) {
+    private SpecificAvroSerde<PositionKey> positionKeySerde() {
         final SpecificAvroSerde<PositionKey> serde = new SpecificAvroSerde<>();
         Map<String, String> config = new HashMap<>();
-        config.put(SCHEMA_REGISTRY_URL_CONFIG, envProps.getProperty("schema.registry.url"));
+        config.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
         serde.configure(config, true);
         return serde;
     }
 
-    private SpecificAvroSerde<PositionValue> positionValueSerde(final Properties envProps) {
+    private SpecificAvroSerde<PositionValue> positionValueSerde() {
         final SpecificAvroSerde<PositionValue> serde = new SpecificAvroSerde<>();
         Map<String, String> config = new HashMap<>();
-        config.put(SCHEMA_REGISTRY_URL_CONFIG, envProps.getProperty("schema.registry.url"));
+        config.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
         serde.configure(config, false);
         return serde;
     }
 
+    private SpecificAvroSerde<LightPositionValue> lightPositionValueSerde() {
+        final SpecificAvroSerde<LightPositionValue> serde = new SpecificAvroSerde<>();
+        Map<String, String> config = new HashMap<>();
+        config.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+        serde.configure(config, false);
+        return serde;
+    }
 
-    private Properties buildProperties() {
+    private Properties buildProperties(String streamName) {
         // config
         final Properties configs = new Properties();
 
@@ -132,10 +163,10 @@ public class VPKStream {
         configs.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
 
         // Is equivalent of client.id for consumer & producer
-        configs.put(StreamsConfig.CLIENT_ID_CONFIG, clientId);
+        configs.put(StreamsConfig.CLIENT_ID_CONFIG, String.format("%s-%s", streamName, clientId));
 
         // Is equivalent of group.id for consumer & producer
-        configs.put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
+        configs.put(StreamsConfig.APPLICATION_ID_CONFIG, String.format("%s-%s", streamName, applicationId));
 
         // This setting helps to identify the offset from where the consumer starts reading the data. Here are the options :
         //  * earliest: automatically reset the offset to the earliest offset
