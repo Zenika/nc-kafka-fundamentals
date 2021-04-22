@@ -5,7 +5,6 @@
     * L'auto configuration de `ConsumerFactory<String, String> `
 
 - Compléter la méthode `KafkaRestConsumer#consume()``
-
     * createConsumer
     * consumer close
     * subscribe on topic
@@ -13,6 +12,6 @@
     * send from emitter
     * close again
 
-- Faire la démo avec le front sur http://localhost:8091
+- Faire la démo avec le front http://localhost:8091
 
-- Expliquer, jouer avec lt wait et expliquer égalementle lag dans akhq, montrer le topic __consumer_offset
+- Expliquer, jouer avec le wait, expliquer lag dans akhq, montrer le topic __consumer_offset

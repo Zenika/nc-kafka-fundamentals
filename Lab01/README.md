@@ -28,7 +28,7 @@ docker-compose up -d
 - Création d'un topic via le container tools
 > Attention le broker ne permets pas la création de topic à la volé
 
-Se connecter dans le container `tools``
+Se connecter dans le container `tools` et créer un topic en CLI
 
 ```console
 docker exec -it tools bash
@@ -39,7 +39,6 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic demo
 * Pourquoi le replication factor de 1 ?
 * Pourquoi le partition de 1 ?
 * Pourquoi le bootstrap-server ?
-
 
 - Checker en CLI que le topic à été créé
 
@@ -59,4 +58,4 @@ kafka-console-producer --broker-list kafka:9092 --topic vehicle-positions
 ```console
 kafka-console-consumer --bootstrap-server kafka:9092 --topic demo --from-beginning
 ```
-> Vérifier le lag et l'existance du consumer group via akhq
+> Vérifier le lag et l'existance du consumer-group via akhq
