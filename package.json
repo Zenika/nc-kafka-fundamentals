@@ -1,0 +1,13 @@
+{
+  "name": "nc-kafka-fundamentals-labs-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.4.0"
+  },
+  "scripts": {
+    "build": "vuepress build labs",
+    "serve": "vuepress dev -p 4200 labs"
+  }
+}
