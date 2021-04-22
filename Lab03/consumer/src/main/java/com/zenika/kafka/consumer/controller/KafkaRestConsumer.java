@@ -40,7 +40,7 @@ public class KafkaRestConsumer {
                     boolean exitLoop = false;
                     while (!exitLoop) {
                         try {
-                            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+                            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
                             for (ConsumerRecord<String, String> record : records) {
                                 emitter.send(record.value());
                                 // waiting to avoid lag on front page

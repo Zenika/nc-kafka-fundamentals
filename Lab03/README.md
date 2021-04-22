@@ -15,4 +15,4 @@
 
 - Faire la démo avec le front sur http://localhost:8091
 
-- Expliquer et jouer avec la durée de poll, voir le lag dans akhq
+- Expliquer, jouer avec lt wait et expliquer égalementle lag dans akhq, montrer le topic __consumer_offset
