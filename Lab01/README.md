@@ -20,7 +20,9 @@ docker-compose up -d
 
 ```
 127.0.0.1 kafka
-127.0.0.1 zk
+127.0.0.1 kz
+127.0.0.1 schema-registry 
+127.0.0.1 connect
 ```
 
 ## Premier pas
