@@ -1,0 +1,77 @@
+version: '3.5'
+services:
+  zk:
+    image: 'confluentinc/cp-zookeeper:${version_confluent}'
+    hostname: zk
+    restart: always
+    container_name: zk
+    networks:
+      - tz-kafka-network
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 4000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: 'zk:2888:3888'
+
+  kafka:
+    image: 'confluentinc/cp-kafka:${version_confluent}'
+    hostname: kafka
+    restart: always
+    container_name: kafka
+    networks:
+      - tz-kafka-network
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 101
+      KAFKA_ZOOKEEPER_CONNECT: 'zk:2181'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT'
+      KAFKA_NUM_PARTITIONS: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.log=WARN,kafka.cluster=WARN,kafka.coordinator=WARN,kafka.controller=WARN,kafka.server=WARN,state.change.logger=WARN"
+
+  akhq:
+    image: tchiotludo/akhq:latest
+    hostname: akhq
+    restart: always
+    container_name: akhq
+    networks:
+      - tz-kafka-network
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            server:
+              properties:
+                bootstrap.servers: "kafka:9092"
+              schema-registry:
+                url: "http://schema-registry:8081"
+              connect:
+                - name: connect
+                  url: "http://connect:8083"
+    ports:
+      - 8080:8080
+
+  tools:
+    image: 'confluentinc/cp-kafka:${version_confluent}'
+    hostname: tools
+    restart: always
+    container_name: tools
+    networks:
+      - tz-kafka-network
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+      cub kafka-ready -b kafka:9092 1 300 && \
+      echo Kafka is ready... &&  sleep infinity'"
+
+
+networks:
+  tz-kafka-network:
+    name: tz-kafka-network
