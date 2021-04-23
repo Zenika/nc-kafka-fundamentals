@@ -23,10 +23,6 @@ public class KafkaListenerConsumer {
     public void consume(ConsumerRecord<String, String> data) {
         log.info("#### -> Consumed message with the easy listener -> topic:{} partition:{} offset:{} key:{}", data.topic(), data.partition(), data.offset(), data.key());
         Thread.sleep(waitingTime.toMillis());
-        if (data.offset() % 2 == 0) {
-            log.warn("Offset is odd generate error in order to write to DLT topic");
-            throw new RuntimeException("Fake Exception");
-        }
     }
 
     // id - When provided, this value will override the group id property in the consumer factory configuration

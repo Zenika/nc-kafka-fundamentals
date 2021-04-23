@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 
 @Service
 @RequiredArgsConstructor
-@Profile("!kafka-template")
 public class VehiclePositionProducer {
 
     private final ProducerFactory<PositionKey, PositionValue> producerFactory;

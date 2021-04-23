@@ -56,21 +56,10 @@ public class VPKStream {
         final StreamsBuilder builder = new StreamsBuilder();
 
         // read avro partition
-        final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
-                Pattern.compile(inputTopic),
-                Consumed.with(SerdesBuilder.build(schemaRegistryUrl, true),
-                        SerdesBuilder.build(schemaRegistryUrl, false))
-        );
 
         // Apply filter operation on oper (22 Nobina Finland Oy) citeria
-        KStream<PositionKey, PositionValue> filter = avroToAvroStream.filter(
-                (readOnlyKey, value) -> value.getOper() == 22
-        );
 
         // Output data
-        filter.to(outputFilteredTopic, Produced.with(SerdesBuilder.build(schemaRegistryUrl, true),
-                SerdesBuilder.build(schemaRegistryUrl, false))
-        );
 
         // print topology
         printTopology(builder.build());
@@ -88,27 +77,10 @@ public class VPKStream {
         final StreamsBuilder builder = new StreamsBuilder();
 
         // read avro partition
-        final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
-                Pattern.compile(inputTopic),
-                Consumed.with(SerdesBuilder.build(schemaRegistryUrl, true),
-                        SerdesBuilder.build(schemaRegistryUrl, false)
-                )
-        );
 
         // Apply mapping to LightPositionValue
-        KStream<PositionKey, LightPositionValue> filter = avroToAvroStream.mapValues(
-                (readOnlyKey, value) -> LightPositionValue.newBuilder()
-                        .setLine(value.getLine())
-                        .setOper(value.getOper())
-                        .setLat(value.getLat())
-                        .setLong$(value.getLong$())
-                        .build()
-        );
 
         // Output data
-        filter.to(outputLightTopic, Produced.with(SerdesBuilder.build(schemaRegistryUrl, true),
-                SerdesBuilder.build(schemaRegistryUrl, false))
-        );
 
         // print topology
         printTopology(builder.build());
@@ -118,11 +90,6 @@ public class VPKStream {
 
         log.info("Kafka Light Mapping Streams is started.");
     }
-
-
-    // 3 - last data for all oper with compaction topic (bonus)
-    // create ktable with last positions
-    // expose KTable with REst
 
     @PreDestroy
     public void onStop() {

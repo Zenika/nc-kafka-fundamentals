@@ -18,7 +18,6 @@ public class Subscriber implements MqttCallback {
     private static final String CLIENT_ID = "MQTT-Java-Example";
     private static final String TOPIC = "/hfp/v2/journey/ongoing/vp/#";
 
-    private final Producer<String, String> producer;
     private final String kafkaTopic;
 
     public void start() {
@@ -59,7 +58,5 @@ public class Subscriber implements MqttCallback {
     public void messageArrived(String topic, MqttMessage message) {
         final String value = new String(message.getPayload());
         log.info("Message arrived: [{}] {}", topic, value);
-        final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, topic, value);
-        producer.send(record);
     }
 }
