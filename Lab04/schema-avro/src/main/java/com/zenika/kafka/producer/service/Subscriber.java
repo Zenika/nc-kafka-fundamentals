@@ -23,7 +23,6 @@ public class Subscriber implements MqttCallback {
     private static final String CLIENT_ID = "MQTT-Java-Example-Avro";
     private static final String TOPIC = "/hfp/v2/journey/ongoing/vp/#";
 
-    private final Producer<PositionKey, PositionValue> producer;
     private final String kafkaTopic;
 
     public void start() {
@@ -65,8 +64,7 @@ public class Subscriber implements MqttCallback {
         log.info("[{}] {}", topic, new String(message.getPayload()));
         final PositionValue value = getPositionValue(message.getPayload());
         final PositionKey key = new PositionKey(topic);
-        final ProducerRecord<PositionKey, PositionValue> record = new ProducerRecord<>(kafkaTopic, key, value);
-        producer.send(record);
+        // TODO send
     }
 
     @SneakyThrows

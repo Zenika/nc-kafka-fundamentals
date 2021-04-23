@@ -14,14 +14,12 @@ import java.time.Duration;
 @Profile("!kafka-template")
 public class VehiclePositionProducer {
 
-    private final ProducerFactory<String, String> producerFactory;
-
     @Value("${application.topic}")
     private String topic;
 
     @PostConstruct
     public void initSubscription() {
-        Subscriber subscriber = new Subscriber(producerFactory.createProducer(), topic);
+        Subscriber subscriber = new Subscriber(topic);
         subscriber.start();
     }
 //        ProducerFactory from spring-kafka is similar to :

@@ -15,14 +15,12 @@ import javax.annotation.PostConstruct;
 @Profile("!kafka-template")
 public class VehiclePositionProducer {
 
-    private final ProducerFactory<PositionKey, PositionValue> producerFactory;
-
     @Value("${application.producer.topic}")
     private String topic;
 
     @PostConstruct
     public void initSubscription() {
-        Subscriber subscriber = new Subscriber(producerFactory.createProducer(), topic);
+        Subscriber subscriber = new Subscriber(topic);
         subscriber.start();
     }
 }

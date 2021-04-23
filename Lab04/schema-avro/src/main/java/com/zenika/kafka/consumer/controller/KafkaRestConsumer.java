@@ -37,14 +37,10 @@ public class KafkaRestConsumer {
         SseEmitter emitter = new SseEmitter(0L);
         sseExecutorService.execute(
                 () -> {
-                    Consumer<PositionKey, PositionValue> consumer = kafkaConsumerFactory.createConsumer();
-                    emitter.onCompletion(consumer::close);
-                    consumer.subscribe(Collections.singletonList(topic));
                     boolean exitLoop = false;
                     while (!exitLoop) {
                         try {
-                            ConsumerRecords<PositionKey, PositionValue> records = consumer.poll(Duration.ofSeconds(5));
-                            for (ConsumerRecord<PositionKey, PositionValue> record : records) {
+                            for (ConsumerRecord<Object, Object> record : ConsumerRecords.empty()) {
                                 emitter.send(record.value().toString());
                                 // waiting to avoid lag on front page
                                 Thread.sleep(waitingTime.toMillis());
@@ -56,7 +52,6 @@ public class KafkaRestConsumer {
                             exitLoop = true;
                         }
                     }
-                    consumer.close();
                     emitter.complete();
                 }
         );
