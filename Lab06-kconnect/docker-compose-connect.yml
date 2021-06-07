@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  connect:
+    image: 'confluentinc/cp-kafka-connect:${version_confluent}'
+    hostname: connect
+    restart: always
+    container_name: connect
+    ports:
+      - 8083:8083
+    networks:
+      - tz-kafka-network
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_GROUP_ID: "connect"
+      CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
+      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
+      CONNECT_KEY_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+      CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
+      CONNECT_REST_HOST_NAME: "connect"
+      CONNECT_REST_PORT: 8083
+      CONNECT_CUB_KAFKA_TIMEOUT: 60
+      CONNECT_REPLICATION_FACTOR: 1
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_CONNECTOR_CLIENT_CONFIG_OVERRIDE_POLICY: "All"
+      CONNECT_TOPIC_CREATION_ENABLE: "true"
+      CONNECT_KEY_CONVERTER_AUTO_REGISTRY_SCHEMAS: "true"
+      CONNECT_VALUE_CONVERTER_AUTO_REGISTRY_SCHEMAS: "true"
+
+networks:
+  tz-kafka-network:
+    external:
+      name: tz-kafka-network

@@ -19,8 +19,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -55,11 +53,22 @@ public class VPKStream {
 
         final StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO read avro partition
+        // read avro partition
+        final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
+                Pattern.compile(inputTopic),
+                Consumed.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                        SerdesBuilder.build(schemaRegistryUrl, false))
+        );
 
-        // TODO Apply filter operation on oper (22 Nobina Finland Oy) citeria
+        // Apply filter operation on oper (22 Nobina Finland Oy) citeria
+        KStream<PositionKey, PositionValue> filter = avroToAvroStream.filter(
+                (readOnlyKey, value) -> value.getOper() == 22
+        );
 
-        // TODO Output data
+        // Output data
+        filter.to(outputFilteredTopic, Produced.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                SerdesBuilder.build(schemaRegistryUrl, false))
+        );
 
         // print topology
         printTopology(builder.build());
@@ -76,11 +85,28 @@ public class VPKStream {
 
         final StreamsBuilder builder = new StreamsBuilder();
 
-        // TODO read avro partition
+        // read avro partition
+        final KStream<PositionKey, PositionValue> avroToAvroStream = builder.stream(
+                Pattern.compile(inputTopic),
+                Consumed.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                        SerdesBuilder.build(schemaRegistryUrl, false)
+                )
+        );
 
-        // TODO Apply mapping to LightPositionValue
+        // Apply mapping to LightPositionValue
+        KStream<PositionKey, LightPositionValue> filter = avroToAvroStream.mapValues(
+                (readOnlyKey, value) -> LightPositionValue.newBuilder()
+                        .setLine(value.getLine())
+                        .setOper(value.getOper())
+                        .setLat(value.getLat())
+                        .setLong$(value.getLong$())
+                        .build()
+        );
 
-        // TODO Output data
+        // Output data
+        filter.to(outputLightTopic, Produced.with(SerdesBuilder.build(schemaRegistryUrl, true),
+                SerdesBuilder.build(schemaRegistryUrl, false))
+        );
 
         // print topology
         printTopology(builder.build());

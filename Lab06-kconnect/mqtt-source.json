@@ -1,0 +1,13 @@
+{
+  "name": "mqtt-source",
+  "config": {
+    "connector.class": "io.confluent.connect.mqtt.MqttSourceConnector",
+    "mqtt.server.uri": "ssl://mqtt.hsl.fi:8883",
+    "mqtt.topics": "/hfp/v2/journey/ongoing/vp/#",
+    "mqtt.qos": "1",
+    "kafka.topic": "vehicle-positions-connect",
+    "tasks.max": "1",
+    "confluent.topic.bootstrap.servers": "kafka:9092",
+    "confluent.topic.replication.factor": "1"
+  }
+}
