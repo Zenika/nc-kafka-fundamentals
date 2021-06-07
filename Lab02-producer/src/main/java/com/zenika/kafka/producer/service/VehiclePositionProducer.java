@@ -17,9 +17,11 @@ public class VehiclePositionProducer {
     @Value("${application.topic}")
     private String topic;
 
+    private final ProducerFactory<String, String> producerFactory;
+
     @PostConstruct
     public void initSubscription() {
-        Subscriber subscriber = new Subscriber(topic);
+        Subscriber subscriber = new Subscriber(producerFactory.createProducer(), topic);
         subscriber.start();
     }
 //        ProducerFactory from spring-kafka is similar to :
