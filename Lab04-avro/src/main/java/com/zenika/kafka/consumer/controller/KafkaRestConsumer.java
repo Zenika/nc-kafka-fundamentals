@@ -1,10 +1,12 @@
 package com.zenika.kafka.consumer.controller;
 
+import com.zenika.kafka.common.model.PositionKey;
+import com.zenika.kafka.common.model.PositionValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,27 +24,28 @@ import java.util.concurrent.Executors;
 @Slf4j
 @RequiredArgsConstructor
 public class KafkaRestConsumer {
-    private final ConsumerFactory<String, String> kafkaConsumerFactory;
+    private final ConsumerFactory<PositionKey, PositionValue> kafkaConsumerFactory;
     private final ExecutorService sseExecutorService = Executors.newCachedThreadPool();
     @Value("${application.waiting-time}")
     private Duration waitingTime;
-    @Value("${application.topic}")
+    @Value("${application.consumer.topic}")
     private String topic;
 
     @GetMapping("/consume")
     public SseEmitter consume() {
         log.debug("REST request to consume records from Kafka topic");
         SseEmitter emitter = new SseEmitter(0L);
-        sseExecutorService.execute(() -> {
-                    KafkaConsumer<String, String> consumer = (KafkaConsumer<String, String>) kafkaConsumerFactory.createConsumer();
+        sseExecutorService.execute(
+                () -> {
+                    Consumer<PositionKey, PositionValue> consumer = kafkaConsumerFactory.createConsumer();
                     emitter.onCompletion(consumer::close);
                     consumer.subscribe(Collections.singletonList(topic));
                     boolean exitLoop = false;
                     while (!exitLoop) {
                         try {
-                            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
-                            for (ConsumerRecord<String, String> record : records) {
-                                emitter.send(record.value());
+                            ConsumerRecords<PositionKey, PositionValue> records = consumer.poll(Duration.ofSeconds(5));
+                            for (ConsumerRecord<PositionKey, PositionValue> record : records) {
+                                emitter.send(record.value().toString());
                                 // waiting to avoid lag on front page
                                 Thread.sleep(waitingTime.toMillis());
                             }
