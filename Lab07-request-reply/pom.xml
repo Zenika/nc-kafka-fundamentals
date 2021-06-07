@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.zenika.kafka</groupId>
-	<artifactId>producer</artifactId>
+	<artifactId>Lab07-request-reply</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>producer</name>
+	<name>Lab07-request-reply</name>
 	<description>Kafka Fundamentals</description>
 	<properties>
 		<java.version>11</java.version>
@@ -29,11 +29,6 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.paho</groupId>
-			<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-			<version>1.2.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

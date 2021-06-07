@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.zenika.kafka</groupId>
-	<artifactId>request-reply</artifactId>
+	<artifactId>Lab03-consumer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>request-reply</name>
+	<name>Lab03-consumer</name>
 	<description>Kafka Fundamentals</description>
 	<properties>
 		<java.version>11</java.version>
@@ -23,8 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-json</artifactId>
-			<scope>compile</scope>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>

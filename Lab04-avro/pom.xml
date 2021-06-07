@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.zenika.kafka</groupId>
-	<artifactId>schema-avro</artifactId>
+	<artifactId>Lab04-avro</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>avro</name>
+	<name>Lab04-avro</name>
 	<description>Kafka Fundamentals</description>
 	<repositories>
 		<!-- other maven repositories the project -->

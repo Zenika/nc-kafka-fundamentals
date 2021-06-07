@@ -1,22 +1,22 @@
 # TZ Kafka fondamentaux
 
 ## 1. Introduction
-[Lab01](./Lab01/README.md)
+[Lab01](labs/1_GETTING_STARTED.md)
 
 ## 2. Production
-[Lab02](./Lab02/README.md)
+[Lab02](labs/2_PRODUCER.md)
 
 ## 3. Consommation
-[Lab03](./Lab03/README.md)
+[Lab03](labs/3_CONSUMER.md)
 
 ## 4. Schema Registry
-[Lab04](./Lab04/README.md)
+[Lab04](labs/4_SCHEMA_REGISTRY.md)
 
 ## 5. Kafka Streams
-[Lab05](./Lab05/README.md)
+[Lab05](labs/5_STREAMS.md)
 
 ## 6. Kafka Connect
-[Lab06](./Lab06/README.md)
+[Lab06](labs/6_CONNECT.md)
 
 ## 7. Spring-kafka Request-Reply (bonus)
-[Lab07](./Lab07/README.md)
+[Lab07](labs/7_REQUEST_REPLY.md)

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.zenika.kafka</groupId>
-	<artifactId>kstream</artifactId>
+	<artifactId>Lab05-kstream</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kstream</name>
+	<name>Lab05-kstream</name>
 	<description>Demo project for Spring Boot</description>
 	<repositories>
 		<!-- other maven repositories the project -->
