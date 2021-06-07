@@ -63,7 +63,10 @@ public class Subscriber implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage message) {
         log.info("[{}] {}", topic, new String(message.getPayload()));
-        // TODO write the producer code which support avro type for key and value
+        final PositionValue value = getPositionValue(message.getPayload());
+        final PositionKey key = new PositionKey(topic);
+        final ProducerRecord<PositionKey, PositionValue> record = new ProducerRecord<>(kafkaTopic, key, value);
+        producer.send(record);
     }
 
     @SneakyThrows

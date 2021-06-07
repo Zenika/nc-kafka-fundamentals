@@ -1,0 +1,29 @@
+{
+  "namespace": "com.zenika.kafka.common.model",
+  "type": "record",
+  "name": "LightPositionValue",
+  "fields": [
+    {
+      "name": "oper",
+      "type": "int"
+    },
+    {
+      "name": "lat",
+      "type": [
+        "null",
+        "double"
+      ]
+    },
+    {
+      "name": "long",
+      "type": [
+        "null",
+        "double"
+      ]
+    },
+    {
+      "name": "line",
+      "type": "int"
+    }
+  ]
+}
