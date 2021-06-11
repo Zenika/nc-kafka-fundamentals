@@ -14,5 +14,5 @@ COPY --from=builder /home/app/target/*.jar /app/
 RUN addgroup --system spring && adduser --system --group spring
 USER spring:spring
 EXPOSE 8091
-ENTRYPOINT ["java","-jar","/app/kstream-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/app/Lab05-kstream-0.0.1-SNAPSHOT.jar"]
         
