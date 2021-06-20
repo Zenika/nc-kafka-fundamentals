@@ -1,4 +1,4 @@
-# Lab02 - Consumer
+# Lab03 - Consumer
 
 - Checkout de la branche `step03`
   

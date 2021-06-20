@@ -1,30 +1,5 @@
 # Lab01 - Découverte kafka, zk et akhq
 
-## Setup
-
-- Clone du repository GIT et checkout de la branche `step01`
-
-```console
-git clone https://github.com/Zenika/nc-kafka-fundamentals && git checkout step01
-```
-
-- Setup de la stack docker
-
-```console
-docker-compose up -d
-```
-
-- Check de l'état de la stack avec akhq `http://localhost:8080/`
-
-- Exposer les containers, ajouter dans votre fichier `/etc/hosts` (linux & osx) :
-
-```
-127.0.0.1 kafka
-127.0.0.1 kz
-127.0.0.1 schema-registry 
-127.0.0.1 connect
-```
-
 ## Premier pas
 
 - Création d'un topic via le container tools
@@ -45,14 +20,14 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic demo
 - Verifier avec la CLI le topic créé
 
 ```console
-kafka-topics list --bootstrap-server kafka:9092
+kafka-topics --list --bootstrap-server kafka:9092
 ```
 > Checker également côté akhq
 
 - Démarrer un producer en CLI
 
 ```console
-kafka-console-producer --broker-list kafka:9092 --topic vehicle-positions
+kafka-console-producer --broker-list kafka:9092 --topic demo
 ```
 
 - Démarrer un consumer en CLI
