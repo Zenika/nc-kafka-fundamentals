@@ -10,6 +10,7 @@ module.exports = {
         logo: '/kafka-logo.png',
         docsDir: 'labs',
         sidebar: [
+            '/0_SETUP',
             '/1_GETTING_STARTED',
             '/2_PRODUCER',
             '/3_CONSUMER',
