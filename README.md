@@ -1,22 +1,11 @@
 # TZ Kafka fondamentaux
 
-## 1. Introduction
-[Lab01](labs/1_GETTING_STARTED.md)
+La Technozaure (TZ) est un format d'évènement interne de conférences à Zenika.
+Les talks sont organisés par des Zénikéens pour des Zénikéens.
 
-## 2. Production
-[Lab02](labs/2_PRODUCER.md)
+Chaque agence organise sa propre Technozaure.
 
-## 3. Consommation
-[Lab03](labs/3_CONSUMER.md)
+L'idée de la technozaure est de nous rassembler sur différents sujets : des présentations techniques, des REX client, des livecodings et des ateliers…
 
-## 4. Schema Registry
-[Lab04](labs/4_SCHEMA_REGISTRY.md)
+La NightClazz est un meetup organisé par Zenika.
 
-## 5. Kafka Streams
-[Lab05](labs/5_STREAMS.md)
-
-## 6. Kafka Connect
-[Lab06](labs/6_CONNECT.md)
-
-## 7. Spring-kafka Request-Reply (bonus)
-[Lab07](labs/7_REQUEST_REPLY.md)

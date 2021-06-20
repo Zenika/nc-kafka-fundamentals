@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "vuepress build labs",
-    "serve": "vuepress dev -p 4200 labs"
+    "serve": "vuepress dev labs",
+    "custom-publish": "rm -rf docs && npm run build && git add docs && git commit -am \"Update labs website ${date}\" && git push origin"
   }
 }

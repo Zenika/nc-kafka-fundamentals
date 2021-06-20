@@ -3,7 +3,7 @@ module.exports = {
     description: "Workshop Kafka fundamentals",
     base: "/nc-kafka-fundamentals/",
     port: 3000,
-    dest: './public/docs',
+    dest: './docs',
     themeConfig: {
         // Assumes GitHub. Can also be a full GitLab url.
         repo: 'Zenika/nc-kafka-fundamentals',
