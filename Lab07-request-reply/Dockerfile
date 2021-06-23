@@ -13,5 +13,5 @@ FROM openjdk:11.0.2-jre-slim
 COPY --from=builder /home/app/target/*.jar /app/
 RUN addgroup --system spring && adduser --system --group spring
 USER spring:spring
-ENTRYPOINT ["java","-jar","/app/request-reply-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/app/Lab07-request-reply-0.0.1-SNAPSHOT.jar"]
         
