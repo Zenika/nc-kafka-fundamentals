@@ -15,9 +15,9 @@
 
 - Parcourir les méthodes de Stream exposées par l'API
 
-- Builder et démarrer le container 
+- Builder et démarrer le conteneur 
 
-```console
+```bash
 docker build -t vp-kstream .
 docker run --name vp-kstream --network=tz-kafka-network -d vp-kstream
 ```

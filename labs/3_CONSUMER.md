@@ -18,9 +18,9 @@
 
 - Expliquer, jouer avec le wait, expliquer lag dans akhq, montrer le topic `__consumer_offset`
 
-- Pour builder et démarrer le container
+- Pour builder et démarrer le conteneur
 
-```console
+```bash
 docker build -t vp-consumer .
 docker run --name vp-consumer --network=tz-kafka-network -d vp-consumer
 ```
@@ -41,7 +41,7 @@ docker run --name vp-consumer --network=tz-kafka-network -d vp-consumer
     * cf. [KafkaListenerConsumer](./consumer/src/main/java/com/zenika/kafka/consumer/service/KafkaListenerConsumer.java)
 
 ```bash
-# Supprimer le container si déjà présent
+# Supprimer le conteneur si déjà présent
 docker container stop vp-consumer
 docker container rm vp-consumer
 docker run --name vp-consumer --network=tz-kafka-network -e "SPRING_PROFILES_ACTIVE=listener" -d vp-consumer

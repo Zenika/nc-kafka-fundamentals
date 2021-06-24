@@ -2,9 +2,9 @@
 
 - Checkout de la branche `step04`
   
-- Ajoutez le container Schema registry 
+- Ajoutez le conteneur Schema registry 
 
-```console
+```bash
 docker-compose -f docker-compose-schema.yml up -d
 ```
 
@@ -23,9 +23,9 @@ docker-compose -f docker-compose-schema.yml up -d
 
 - Montrer dans akhq les schémas stockés côté schema registry
 
-- Pour builder et démarrer le container 
+- Pour builder et démarrer le conteneur 
 
-```console
+```bash
 docker build -t vp-avro-producer .
 docker run --name vp-avro-producer --network=tz-kafka-network -d vp-avro-producer
 ```
