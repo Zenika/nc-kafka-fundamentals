@@ -48,7 +48,7 @@ Il est nécessaire de disposer de 2 GO de RAM pour démarrer l'ensemble de la st
 
 ## Setup
 
-- ⚠️ Clone du repository GIT et checkout de la branche `step01` ⚠️
+- ⚠️ Clone du repository GIT et checkout de la branche `step01` ⚠️.
 
 ```bash
 git clone https://github.com/Zenika/nc-kafka-fundamentals && git checkout step01

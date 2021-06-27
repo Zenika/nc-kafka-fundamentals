@@ -18,7 +18,7 @@ module.exports = {
             '/5_STREAMS',
             '/6_CONNECT',
             '/7_REQUEST_REPLY',
-            '/10_GLOSSARY'
+            //'/10_GLOSSARY'
         ]
     }
 };

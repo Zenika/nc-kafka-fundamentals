@@ -15,6 +15,8 @@ Ce qui permet de facilement tracer leurs positions et de réaliser des exemples 
 
 ![digitransit](digitransit.svg)
 
+### Consommation de la file MQTT Digitransit vers Kafka
+
 <p style="text-align:center">
 <img src="lab02.mqtt.png" alt="lab02.mqtt" />
 </p>
@@ -27,9 +29,9 @@ Ce qui permet de facilement tracer leurs positions et de réaliser des exemples 
 
 ## Préparer le projet et le topic Kafka
 
-- ⚠️ Checkout de la branche `step02` ⚠️
+- ⚠️ Checkout de la branche `step02` ⚠️.
 
-- Se placer dans le repertoire `Lab02-producer`
+- Se placer dans le repertoire `Lab02-producer`.
 
 - Créer un topic `vehicle-positions` en CLI si celui-ci n'est pas déjà présent.
 
@@ -44,7 +46,7 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
 - Au sein de ce lab nous utilisons [spring-kafka](https://spring.io/projects/spring-kafka) pour dialoguer avec Kafka au
   sein de l'écosystème Spring Boot.
 
-- Nous allons découvrir sommairement, comment envoyer un message à l'aide de Spring Kafka. Pour plus de documentations :
+- Nous allons découvrir sommairement, comment envoyer un message à l'aide de Spring Kafka. Pour plus de documentations:
   [https://docs.spring.io/spring-kafka/reference/html/#sending-messages](https://docs.spring.io/spring-kafka/reference/html/#sending-messages)
 
 - En effet pour produire un message vous disposez de plusieurs façons de le réaliser avec Spring Kafka:
@@ -92,7 +94,19 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
 
 - Compléter la méthode `SubscriberWithTemplate#messageArrived()` afin de produire des évènements
 
-- Vous pouvez vous inspirer de cet excellent tutorial de Baeldung: [https://www.baeldung.com/spring-kafka](https://www.baeldung.com/spring-kafka)
+- Vous pouvez vous inspirer de cet excellent tutorial de
+  Baeldung: [https://www.baeldung.com/spring-kafka](https://www.baeldung.com/spring-kafka)
+
+### Démarrer votre application en local
+
+- Il s'agit d'un projet Maven qui dispose d'un wrapper `mvnw` et du plugin `spring-boot-maven-plugin`, vous pouvez
+  démarrer votre application spring en local à l'aide de la commande suivante:
+
+> Se placer dans le bon répertoire `Lab02-producer`
+
+```shell
+./mvnw spring-boot:run
+```
 
 ## Packager votre application avec Docker
 
