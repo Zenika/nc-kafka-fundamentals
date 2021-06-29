@@ -31,22 +31,22 @@ docker-compose -f docker-compose-connect.yml up -d
 
 ## 1. Installer le connecteur MQTT
 
-Se placer dans le conteneur `connect`
+- Se placer dans le conteneur `connect`
 
 ```bash
 docker exec -it connect bash
 ```
 
-Installer le connecteur MQTT
+- Installer le connecteur MQTT
 
-_⚠️ License_ : [https://docs.confluent.io/kafka-connect-mqtt/current/index.html#license](https://docs.confluent.io/kafka-connect-mqtt/current/index.html#license)
+_⚠️
+License_ : [https://docs.confluent.io/kafka-connect-mqtt/current/index.html#license](https://docs.confluent.io/kafka-connect-mqtt/current/index.html#license)
 
 ```bash
 confluent-hub install --no-prompt confluentinc/kafka-connect-mqtt:latest
-exit
 ```
 
-Redemarrer connect
+- Quitter le conteneur et redémarrer le conteneur `connect`
 
 ```bash
 docker restart connect
@@ -54,12 +54,18 @@ docker restart connect
 
 ## 2. Creer les topics nécessaires au connecteur MQTT
 
-Nous utiliserons un topic `vehicle-positions-connect`  pour notre connecteur.
+Nous utiliserons un topic `vehicle-positions-connect` pour notre connecteur.
+
+- Se connecter dans le conteneur `tools`
 
 ```bash
 docker exec -it tools bash
+```
+
+- Créer le topic nécessaire
+
+```bash
 kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehicle-positions-connect --replication-factor 1 --partitions 1
-exit
 ```
 
 ## 3. configuration du connecteur
@@ -89,15 +95,25 @@ curl http://connect:8083/connectors/mqtt-source/status
 
 ### Binaire Kafka
 
+- Se connecter dans le conteneur `tools`
+
 ```bash
 docker exec -it tools bash
+```
+
+- Créer un consumer avec la command line
+
+```bash
 kafka-console-consumer --topic vehicle-positions-connect --from-beginning --bootstrap-server kafka:9092
-exit`
 ```
 
 ### AKHQ
 
-`http://localhost:8080/ui/server/topic/vehicle-positions-connect/data?sort=Oldest&partition=All`
+- le
+  topic `vehicle-positions-connect` [http://akhq:8080/ui/server/topic/vehicle-positions-connect/data?sort=Oldest&partition=All](http://akhq:8080/ui/server/topic/vehicle-positions-connect/data?sort=Oldest&partition=All)
+
+- les connecteurs "
+  Kafka-Connect" [http://akhq:8080/ui/server/connect/connect](http://akhq:8080/ui/server/connect/connect)
 
 ## 5. suppression du connecteur
 
@@ -108,7 +124,3 @@ curl -v -X DELETE http://connect:8083/connectors/mqtt-source
 < Date: Tue, 20 Apr 2021 19:50:50 GMT
 < Server: Jetty(9.4.38.v20210224)
 ```
-
-## Solution
-
-Vous vous doutez que pour disposer des solutions de la `step06`, il vous suffit de️ checkout la branche `step07` 😊

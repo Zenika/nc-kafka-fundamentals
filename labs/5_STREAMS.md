@@ -1,4 +1,4 @@
-# Lab05 - Kafka Stream
+# Lab05 - Kafka Streams
 
 ## Rappel
 

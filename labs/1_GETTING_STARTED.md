@@ -13,9 +13,11 @@
 
 ![Topic etc.](lab01.topic.png)
 
-- **Topic** : vue abstraite d'un ensemble de partitions qui vont idéalement contenir un ensemble de record d'un même type.
-- **Partition** : permets de répartir les records en plusieurs espaces (partition) ce qui permets la scabilité de consommation et de production. 
-- **Segment** : une partition est répartie en plusieurs fichiers sur le disque, les records sont ajoutés au fil de l'eau 
+- **Topic** : vue abstraite d'un ensemble de partitions qui vont idéalement contenir un ensemble de record d'un même
+  type.
+- **Partition** : permets de répartir les records en plusieurs espaces (partition) ce qui permets la scabilité de
+  consommation et de production.
+- **Segment** : une partition est répartie en plusieurs fichiers sur le disque, les records sont ajoutés au fil de l'eau
 
 ## Premier pas
 
@@ -44,8 +46,6 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic demo
 kafka-topics --list --bootstrap-server kafka:9092
 ```
 
-> Checker également côté akhq
-
 - Démarrer un producer à l'aide de la ligne de commande
 
 ```bash
@@ -58,7 +58,11 @@ kafka-console-producer --broker-list kafka:9092 --topic demo
 kafka-console-consumer --bootstrap-server kafka:9092 --topic demo --from-beginning
 ```
 
-> Consulter le lag et l'existence du consumer-group via akhq
+<p style="text-align:center">
+<img src="topic.png" alt="topic" />
+</p>
+
+> * Pourquoi le `--from-beginning` ?
 
 ## AKHQ (anciennement KafkaHQ)
 
