@@ -1,20 +1,66 @@
 # Lab02 - Producer
 
-- Checkout de la branche `step02`
-  
-- Au sein de ce lab nous utilisons [spring-kafka](https://spring.io/projects/spring-kafka) pour dialoguer avec Kafka au
-  sein de l'écosystème Spring Boot.
+## Rappel
+
+<p style="text-align:center">
+<img src="lab02.png" alt="lab02" />
+</p>
+
+## Digitransit
+
+[https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/)
+
+La plupart des véhicules dans la finlande devraient publier leur statut, y compris leur position, une fois par seconde.
+Ce qui permet de facilement tracer leurs positions et de réaliser des exemples concrets dans un environment proche IOT.
+
+![digitransit](digitransit.svg)
+
+### Consommation de la file MQTT Digitransit vers Kafka
+
+<p style="text-align:center">
+<img src="lab02.mqtt.png" alt="lab02.mqtt" />
+</p>
+
+## Un record
+
+<p style="text-align:center">
+<img src="record.png" alt="record" />
+</p>
+
+## Préparer le projet et le topic Kafka
+
+- ⚠️ Checkout de la branche `step02` ⚠️.
+
+- Se placer dans le repertoire `Lab02-producer`.
 
 - Créer un topic `vehicle-positions` en CLI si celui-ci n'est pas déjà présent.
 
-```console
+> ⚠️ Penser à être présent dans le conteneur `tools`
+
+```bash
 kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehicle-positions --replication-factor 1 --partitions 1
 ```
 
-- Présenter le projet spring boot
-    * La configuation présente dans le fichier application.properties
+## Un peu de code
+
+- Au sein de ce lab nous utilisons [spring-kafka](https://spring.io/projects/spring-kafka) pour dialoguer avec Kafka au
+  sein de l'écosystème Spring Boot.
+
+- Nous allons découvrir sommairement, comment envoyer un message à l'aide de Spring Kafka. Pour plus de documentations:
+  [https://docs.spring.io/spring-kafka/reference/html/#sending-messages](https://docs.spring.io/spring-kafka/reference/html/#sending-messages)
+
+- En effet pour produire un message vous disposez de plusieurs façons de le réaliser avec Spring Kafka:
+    - en utilisant
+      un `Producer` [https://kafka.apache.org/26/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html](https://kafka.apache.org/26/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html)
+    - en utilisant un wrapper (pour masquer une certaine
+      complexité) `KafkaTemplate` [https://docs.spring.io/spring-kafka/api/org/springframework/kafka/core/KafkaTemplate.html](https://docs.spring.io/spring-kafka/api/org/springframework/kafka/core/KafkaTemplate.html)
+
+### Utilisation de l'API `Producer`
+
+- Explorer le projet Spring Boot `Lab02-producer`
+    * La configuation présente dans le fichier `application.properties`
     * L'auto configuration de `ProducerFactory<String, String>` en lien avec les properties
-    * Le client mqtt qui scrap les évènements
+    * Le client mqtt qui récupère les évènements
       de [Digitransit](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/)
 
   > En effet, Spring Boot fournit une configuration automatique pour Kafka via la classe `KafkaAutoConfiguration` ([javadoc](https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/autoconfigure/kafka/KafkaAutoConfiguration.html))
@@ -29,27 +75,65 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
   > * `kafkaTemplate`
 
 
-- Compléter la métode `Subscriber#messageArrived()` afin de produire des evenements
+- Compléter la méthode `Subscriber#messageArrived()` afin de produire des évènements
 
-- Checker dans akhq que des messages sont produits
+- Vous pouvez vous inspirer de cet excellent tutorial, rédigé par Confluent qui présente comment réaliser un `Producer`
+  en `Vanilla Java`:
+  [https://kafka-tutorials.confluent.io/creating-first-apache-kafka-producer-application/kafka.html](https://kafka-tutorials.confluent.io/creating-first-apache-kafka-producer-application/kafka.html)
 
-- Pour builder et démarrer le container
+- Verifier dans AKHQ que des messages sont
+  produits [http://akhq:8080/ui/server/topic/vehicle-positions](http://akhq:8080/ui/server/topic/vehicle-positions)
 
-```console
-docker build -t vp-producer .
-docker run --name vp-producer --network=tz-kafka-network -d vp-producer
-```
+### Utilisation de l'API `KafkaTemplate`
 
 - Utilisation du profil spring `kafka-template`, plutôt que de s'appuyer sur le `kafkaProducerFactory`, on peut utiliser
   le bean `kafkaTemplate`
-  * Le `KafkaTemplate` wraps un producer et fournit des méthodes pratiques pour envoyer des données aux topics Kafka.
-  * Consulter la [Javadoc](https://docs.spring.io/spring-kafka/api/org/springframework/kafka/core/KafkaTemplate.html) pour plus d'informations.
+    * Le `KafkaTemplate` wraps un producer et fournit des méthodes pratiques pour envoyer des données aux topics Kafka.
+    * Consulter la [Javadoc](https://docs.spring.io/spring-kafka/api/org/springframework/kafka/core/KafkaTemplate.html)
+      pour plus d'informations.
 
-- Pour démarrer votre container avec le profile `kafka-template`
+- Compléter la méthode `SubscriberWithTemplate#messageArrived()` afin de produire des évènements
+
+- Vous pouvez vous inspirer de cet excellent tutorial de
+  Baeldung: [https://www.baeldung.com/spring-kafka](https://www.baeldung.com/spring-kafka)
+
+### Démarrer votre application en local
+
+- Il s'agit d'un projet Maven qui dispose d'un wrapper `mvnw` et du plugin `spring-boot-maven-plugin`, vous pouvez
+  démarrer votre application spring en local à l'aide de la commande suivante:
+
+> Se placer dans le bon répertoire `Lab02-producer`
+
+```shell
+./mvnw spring-boot:run
+```
+
+## Packager votre application avec Docker
+
+- Pour builder et démarrer le conteneur
+
+> Se placer dans le bon répertoire `Lab02-producer`
 
 ```bash
-# Supprimer le container si déjà présent
-docker container stop vp-producer
-docker container rm vp-producer
+docker build -t vp-producer .
+```
+
+```bash
+docker run --name vp-producer --network=tz-kafka-network -d vp-producer
+```
+
+- Pour démarrer votre conteneur avec le profile `kafka-template`
+
+```bash
 docker run --name vp-producer --network=tz-kafka-network -e "SPRING_PROFILES_ACTIVE=kafka-template" -d vp-producer
 ```
+
+> Supprimer le conteneur si déjà présent
+> ```bash
+> docker container stop vp-producer
+> docker container rm vp-producer
+>  ```
+
+## Solution
+
+Vous vous doutez que pour disposer des solutions de la `step02`, il vous suffit de️ checkout la branche `step03` 😊

@@ -1,63 +1,75 @@
-# Lab01 - Découverte kafka, zk et akhq
+# Lab01 - Découverte Kafka, Zookeeper et AKHQ
 
-## Setup
+## Rappel
 
-- Clone du repository GIT et checkout de la branche `step01`
+<p style="text-align:center">
+<img src="lab01.png" alt="lab01" />
+</p>
 
-```console
-git clone https://github.com/Zenika/nc-kafka-fundamentals && git checkout step01
-```
+> * Pourquoi Zookeeper ?
+> * La fameuse KIP-500 : [https://issues.apache.org/jira/browse/KAFKA-9119](https://issues.apache.org/jira/browse/KAFKA-9119)
 
-- Setup de la stack docker
+## Topic / Partition / Segment
 
-```console
-docker-compose up -d
-```
-
-- Check de l'état de la stack avec akhq `http://localhost:8080/`
-
-- Exposer les containers, ajouter dans votre fichier `/etc/hosts` (linux & osx) :
-
-```
-127.0.0.1 kafka
-127.0.0.1 kz
-127.0.0.1 schema-registry 
-127.0.0.1 connect
-```
+![Topic etc.](topic.etc.png)
 
 ## Premier pas
 
-- Création d'un topic via le container tools
+- Création d'un topic via le conteneur `tools`
+
 > Attention le broker ne permet pas la création de topic à la volée `KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'`
 
-Se connecter dans le container `tools` et créer un topic en CLI
+Se connecter dans le conteneur `tools` et créer un topic à l'aide de la ligne de commande
 
-```console
+```bash
 docker exec -it tools bash
+```
 
+```bash
+# Dans le conteneur tools
 kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic demo --replication-factor 1 --partitions 1
 ```
 
-* Pourquoi le replication factor de 1 ?
-* Pourquoi le partition de 1 ?
-* Pourquoi le bootstrap-server ?
+> * Pourquoi le replication factor de 1 ?
+> * Pourquoi le partition de 1 ?
+> * Pourquoi le bootstrap-server ?
 
 - Verifier avec la CLI le topic créé
 
-```console
-kafka-topics list --bootstrap-server kafka:9092
+```bash
+kafka-topics --list --bootstrap-server kafka:9092
 ```
+
 > Checker également côté akhq
 
-- Démarrer un producer en CLI
+- Démarrer un producer à l'aide de la ligne de commande
 
-```console
-kafka-console-producer --broker-list kafka:9092 --topic vehicle-positions
+```bash
+kafka-console-producer --broker-list kafka:9092 --topic demo
 ```
 
-- Démarrer un consumer en CLI
+- Démarrer un consumer à l'aide de la ligne de commande
 
-```console
+```bash
 kafka-console-consumer --bootstrap-server kafka:9092 --topic demo --from-beginning
 ```
+
 > Consulter le lag et l'existence du consumer-group via akhq
+
+## AKHQ (anciennement KafkaHQ)
+
+- Pour consulter AKHQ en local [http://akhq:8080/](http://akhq:8080/)
+
+- Produit local Ch'ti !
+
+- Développé par `@tchiotludo`
+
+- Wep App open source qui expose une interface permettant :
+    - Monitorer son cluster (broker, topics, consumer group, etc.)
+    - Visualiser le contenu de la schéma registry
+    - Lire / Écrire de la donnée
+    - etc.
+
+![akhq](akhq.svg)
+![akhq broker](akhq_broker.png)
+![akhq topic](akhq_topic.png)
