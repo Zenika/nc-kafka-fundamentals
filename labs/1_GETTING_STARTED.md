@@ -11,7 +11,11 @@
 
 ## Topic / Partition / Segment
 
-![Topic etc.](topic.etc.png)
+![Topic etc.](lab01.topic.png)
+
+- **Topic** : vue abstraite d'un ensemble de partitions qui vont idéalement contenir un ensemble de record d'un même type.
+- **Partition** : permets de répartir les records en plusieurs espaces (partition) ce qui permets la scabilité de consommation et de production. 
+- **Segment** : une partition est répartie en plusieurs fichiers sur le disque, les records sont ajoutés au fil de l'eau 
 
 ## Premier pas
 
@@ -73,3 +77,7 @@ kafka-console-consumer --bootstrap-server kafka:9092 --topic demo --from-beginni
 ![akhq](akhq.svg)
 ![akhq broker](akhq_broker.png)
 ![akhq topic](akhq_topic.png)
+
+## Topic Partition avec replication factor à 3
+
+![Topic etc.](lab01.topic.replication.png)
