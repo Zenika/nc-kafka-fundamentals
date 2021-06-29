@@ -1,6 +1,6 @@
-# JetBrains
-.idea/
+# Intellj
+.idea
 *.iml
 
-# Java
-target
+# Npm
+node_modules
