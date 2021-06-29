@@ -8,20 +8,12 @@
 
 > ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
 
-* [Prometheus](https://prometheus.io/)
-
-> Prometheus is an open-source systems monitoring and alerting toolkit
-
-* [Grafana](https://grafana.com/)
-
-> Grafana allows you to query, visualize, alert on and understand your metrics no matter where they are stored. Create, explore, and share dashboards with your team and foster a data driven culture.
-
 * [JMX](https://en.wikipedia.org/wiki/Java_Management_Extensions)
 
 > Java Management Extensions (JMX) is a Java technology that supplies tools for managing and monitoring applications
 
 * [Apache Kafka JMX Metrics](https://docs.confluent.io/current/kafka/monitoring.html)
 
-* [Confluent &Control Center](https://docs.confluent.io/current/control-center/index.html)
+* [Confluent & Control Center](https://docs.confluent.io/current/control-center/index.html)
 
 > Confluent Control Center is a web-based tool for managing and monitoring Apache Kafka

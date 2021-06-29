@@ -56,10 +56,10 @@ public class Subscriber implements MqttCallback {
     }
 
     @Override
-    public void messageArrived(String topic, MqttMessage message) {
+    public void messageArrived(String queue, MqttMessage message) {
         final String value = new String(message.getPayload());
-        log.info("Message arrived: [{}] {}", topic, value);
-        final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, topic, value);
+        log.info("Message arrived on MQTT queue: [{}] payload: {}", queue, value);
+        final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, queue, value);
         producer.send(record);
     }
 }

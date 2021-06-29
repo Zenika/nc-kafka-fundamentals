@@ -10,6 +10,7 @@ module.exports = {
         logo: '/kafka-logo.png',
         docsDir: 'labs',
         sidebar: [
+            '/0_SETUP',
             '/1_GETTING_STARTED',
             '/2_PRODUCER',
             '/3_CONSUMER',
@@ -17,7 +18,7 @@ module.exports = {
             '/5_STREAMS',
             '/6_CONNECT',
             '/7_REQUEST_REPLY',
-            '/10_GLOSSARY'
+            //'/10_GLOSSARY'
         ]
     }
 };
