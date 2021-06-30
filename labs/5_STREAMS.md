@@ -34,23 +34,69 @@
 - Se placer dans le repertoire `Lab05-kstream`
 
 - Explorer le projet Spring Boot `Lab05-kstream`
-    * La configuation présente dans le fichier `application.properties`
+    * La configuration présente dans le fichier `application.properties`
     * Le `StreamBuilder`
 
-// FIXME
------------
+- Créer les topics `vehicle-positions-filtered-avro` & `vehicle-positions-light-avro` en CLI.
 
-la topology (affichage avec [https://zz85.github.io/kafka-streams-viz/](https://zz85.github.io/kafka-streams-viz/))
+> ⚠️ Penser à être présent dans le conteneur `tools`
 
-- Compléter le code pour réalier un filtrage des données
+```bash
+kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehicle-positions-filtered-avro --replication-factor 1 --partitions 1
+kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehicle-positions-light-avro --replication-factor 1 --partitions 1
+```
 
-- Compléter le code pour réalier un mapping des données sur le type LightPositionValue
+## Un peu de code
 
-- Parcourir les méthodes de Stream exposées par l'API
+- Au sein de la classe `VPKStream` nous souhaitons réaliser deux opérations via des Streams :
+
+- Compléter le code dans la méthode `startFilterStream()` pour réaliser un filtrage des records sur le champ **oper** 
+  afin de ne conserver que les records spécifiques à l'opérateur 22 (Nobina Finland Oy).
+  Utiliser le topic de sortie suivant `vehicle-positions-filtered-avro`. 
+  Ce dernier ne doit contenir que des records spécifiques à l'opérateur 22.
+
+- Compléter le code dans la méthode `startLightMappingStream()` pour réaliser un mapping des données
+  sur le type `LightPositionValue`
+  Utiliser le topic de sortie suivant `vehicle-positions-filtered-avro`.
+  Ce dernier ne doit contenir que des records spécifiques à l'opérateur 22.
+
+- N'hésitez pas à parcourir l'ensemble des méthodes présentes dans la classe `KStream` afin d'avoir une vue d'ensemble
+  des possibilités offertes par cette dernière. 
+
+- Au démarrage de l'application les topology de vos streams sont affichés dans les logs, vous pouvez utiliser
+  la web app suivante [https://zz85.github.io/kafka-streams-viz/](https://zz85.github.io/kafka-streams-viz/)) afin de simplfier leurs représentations.
+
+> Topology du stream décrit dans la méthode `startFilterStream()`
+
+```console
+com.zenika.kafka.kstream.VPKStream       : Topologies:
+Sub-topology: 0
+Source: KSTREAM-SOURCE-0000000000 (topics: vehicle-positions-avro)
+--> KSTREAM-FILTER-0000000001
+Processor: KSTREAM-FILTER-0000000001 (stores: [])
+--> KSTREAM-SINK-0000000002
+<-- KSTREAM-SOURCE-0000000000
+Sink: KSTREAM-SINK-0000000002 (topic: vehicle-positions-filtered-avro)
+<-- KSTREAM-FILTER-0000000001
+```
+
+> Topology du stream décrit dans la méthode `startLightMappingStream()`
+
+```console
+com.zenika.kafka.kstream.VPKStream       : Topologies:
+Sub-topology: 0
+Source: KSTREAM-SOURCE-0000000000 (topics: vehicle-positions-avro)
+--> KSTREAM-MAPVALUES-0000000001
+Processor: KSTREAM-MAPVALUES-0000000001 (stores: [])
+--> KSTREAM-SINK-0000000002
+<-- KSTREAM-SOURCE-0000000000
+Sink: KSTREAM-SINK-0000000002 (topic: vehicle-positions-light-avro)
+<-- KSTREAM-MAPVALUES-0000000001
+```
 
 ### Démarrer votre application en local
-
--Il s'agit d'un projet Maven qui dispose d'un wrapper `mvnw` et du plugin `spring-boot-maven-plugin`, vous pouvez
+ 
+- Il s'agit d'un projet Maven qui dispose d'un wrapper `mvnw` et du plugin `spring-boot-maven-plugin`, vous pouvez
 démarrer votre application spring en local à l'aide de la commande suivante:
 
 > Se placer dans le bon répertoire `Lab05-kstream`
@@ -59,7 +105,7 @@ démarrer votre application spring en local à l'aide de la commande suivante:
 ./mvnw spring-boot:run
 ```
 
-- Visualiser la modifications des messages sur AKHQ: [http://akhq:8080/](http://akhq:8080/)
+- Visualiser les modifications des records dans AKHQ: [http://akhq:8080/](http://akhq:8080/)
 
 ## Packager votre application avec Docker
 
