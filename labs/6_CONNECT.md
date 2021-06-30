@@ -8,22 +8,25 @@
 
 ## Kafka Connect
 
-- Kafka Connect est un composant open source d'Apache Kafka.
+- Kafka Connect est un composant open source d'Apache Kafka qui permets de créer des "connecteurs". 
 
-- Vous pouvez créer un "connecteur" avec l'API Kafka Connect, qui permet de créer facilement des producer ou des
-  consumer Kafka tolérants aux pannes pour diffuser des données entrant (**"source"**) et sortant (**"sink"**) de Kafka.
+- Il existe deux modes de fonctionnement pour les connecteurs :
+    - **Source** : Le principe est "d'écouter" les événements produits dans un système (exemple : mongodb, jira) et de produire des records correspondants dans Kafka.
+    - **Sink** : Le connecteur consomme les records d'un topic Kafka et viens produire dans un système (exemple : s3, elastic) les événements correspondants   
 
 ![kafka-connect.png](kafka-connect.png)
 
 - Kafka Connect comprend une API REST pour créer, modifier et supprimer la configuration d'un connecteur.
 
+- Confluent propose un [large choix de connecteurs](https://www.confluent.io/hub/) supportant divers systèmes.
+
 ## Préparer le projet
 
 - ⚠️ Checkout de la branche `step03` ⚠️.
 
-- Se placer dans le repertoire `Lab06-kconnect`.
+- Se placer dans le répertoire `Lab06-kconnect`.
 
-- Demarrer le conteneur `kafka-connect` au sein du réseau existant.
+- Démarrer le conteneur `kafka-connect` au sein du réseau existant.
 
 ```bash
 docker-compose -f docker-compose-connect.yml up -d

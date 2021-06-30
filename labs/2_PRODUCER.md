@@ -10,8 +10,9 @@
 
 [https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/)
 
-La plupart des véhicules dans la finlande devraient publier leur statut, y compris leur position, une fois par seconde.
-Ce qui permet de facilement tracer leurs positions et de réaliser des exemples concrets dans un environment proche IOT.
+La plupart des véhicules situés en **Finlande 🇫🇮** produisent des événements comprenant entre autre leurs status et
+leurs positions, une fois par seconde. Ce qui permet de facilement tracer leurs positions et de réaliser des exemples
+concrets dans un environment proche IOT.
 
 ![digitransit](digitransit.svg)
 
@@ -31,11 +32,11 @@ Ce qui permet de facilement tracer leurs positions et de réaliser des exemples 
 
 - ⚠️ Checkout de la branche `step02` ⚠️.
 
-- Se placer dans le repertoire `Lab02-producer`.
+- Se placer dans le répertoire `Lab02-producer`.
 
 - Créer un topic `vehicle-positions` en CLI si celui-ci n'est pas déjà présent.
 
-> ⚠️ Penser à être présent dans le conteneur `tools`
+> ⚠️ Pensez à être présent dans le conteneur `tools`
 
 ```bash
 kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehicle-positions --replication-factor 1 --partitions 1
@@ -46,10 +47,11 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
 - Au sein de ce lab nous utilisons [spring-kafka](https://spring.io/projects/spring-kafka) pour dialoguer avec Kafka au
   sein de l'écosystème Spring Boot.
 
-- Nous allons découvrir sommairement, comment envoyer un message à l'aide de Spring Kafka. Pour plus de documentations:
+- Nous allons découvrir sommairement, comment produire / envoyer un message à l'aide de Spring Kafka. Pour plus de
+  documentations :
   [https://docs.spring.io/spring-kafka/reference/html/#sending-messages](https://docs.spring.io/spring-kafka/reference/html/#sending-messages)
 
-- En effet pour produire un message vous disposez de plusieurs façons de le réaliser avec Spring Kafka:
+- En effet pour produire un message vous disposez de plusieurs façons de le réaliser avec Spring Kafka :
     - en utilisant
       un `Producer` [https://kafka.apache.org/26/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html](https://kafka.apache.org/26/javadoc/index.html?org/apache/kafka/clients/producer/KafkaProducer.html)
     - en utilisant un wrapper (pour masquer une certaine
@@ -58,8 +60,8 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
 ### Utilisation de l'API `Producer`
 
 - Explorer le projet Spring Boot `Lab02-producer`
-    * La configuation présente dans le fichier `application.properties`
-    * L'auto configuration de `ProducerFactory<String, String>` en lien avec les properties
+    * La configuration présente dans le fichier `application.properties`
+    * L'auto-configuration de `ProducerFactory<String, String>` en lien avec les properties
     * Le client mqtt qui récupère les évènements
       de [Digitransit](https://digitransit.fi/en/developers/apis/4-realtime-api/vehicle-positions/)
 
@@ -74,11 +76,9 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
   > * `kafkaProducerListener`
   > * `kafkaTemplate`
 
-
 - Compléter la méthode `Subscriber#messageArrived()` afin de produire des évènements
 
-- Vous pouvez vous inspirer de cet excellent tutorial, rédigé par Confluent qui présente comment réaliser un `Producer`
-  en `Vanilla Java`:
+- Pour un `Producer` en mode `Vanilla Java` vous pouvez vous inspirer de ce tutorial rédigé par Confluent  
   [https://kafka-tutorials.confluent.io/creating-first-apache-kafka-producer-application/kafka.html](https://kafka-tutorials.confluent.io/creating-first-apache-kafka-producer-application/kafka.html)
 
 - Verifier dans AKHQ que des messages sont
@@ -88,19 +88,20 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic vehi
 
 - Utilisation du profil spring `kafka-template`, plutôt que de s'appuyer sur le `kafkaProducerFactory`, on peut utiliser
   le bean `kafkaTemplate`
-    * Le `KafkaTemplate` wraps un producer et fournit des méthodes pratiques pour envoyer des données aux topics Kafka.
+    * Le `KafkaTemplate` wraps un producer et fournit des méthodes pratiques pour produire des records sur les topics
+      Kafka.
     * Consulter la [Javadoc](https://docs.spring.io/spring-kafka/api/org/springframework/kafka/core/KafkaTemplate.html)
       pour plus d'informations.
 
 - Compléter la méthode `SubscriberWithTemplate#messageArrived()` afin de produire des évènements
 
-- Vous pouvez vous inspirer de cet excellent tutorial de
+- Vous pouvez vous inspirer de ce tutorial de
   Baeldung: [https://www.baeldung.com/spring-kafka](https://www.baeldung.com/spring-kafka)
 
 ### Démarrer votre application en local
 
 - Il s'agit d'un projet Maven qui dispose d'un wrapper `mvnw` et du plugin `spring-boot-maven-plugin`, vous pouvez
-  démarrer votre application spring en local à l'aide de la commande suivante:
+  démarrer votre application spring en local à l'aide de la commande suivante :
 
 > Se placer dans le bon répertoire `Lab02-producer`
 

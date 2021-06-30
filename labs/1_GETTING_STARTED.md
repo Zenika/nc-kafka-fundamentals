@@ -13,11 +13,12 @@
 
 ![Topic etc.](lab01.topic.png)
 
-- **Topic** : vue abstraite d'un ensemble de partitions qui vont idéalement contenir un ensemble de record d'un même
+- **Topic** : vue abstraite d'un ensemble de partitions qui vont (idéalement) contenir un ensemble de record d'un même
   type.
-- **Partition** : permets de répartir les records en plusieurs espaces (partition) ce qui permets la scabilité de
-  consommation et de production.
-- **Segment** : une partition est répartie en plusieurs fichiers sur le disque, les records sont ajoutés au fil de l'eau
+- **Partition** : permets de répartir les records en plusieurs espaces (partition) ce qui offre la scalabilité sur la
+  consommation et la production.
+- **Segment** : une partition est répartie en plusieurs fichiers sur le disque (segment), les records sont ajoutés au
+  fil de l'eau.
 
 ## Premier pas
 
@@ -40,19 +41,19 @@ kafka-topics --if-not-exists --bootstrap-server kafka:9092 --create --topic demo
 > * Pourquoi le partition de 1 ?
 > * Pourquoi le bootstrap-server ?
 
-- Verifier avec la CLI le topic créé
+- Verifier avec la CLI que le topic à été correctement crée
 
 ```bash
 kafka-topics --list --bootstrap-server kafka:9092
 ```
 
-- Démarrer un producer à l'aide de la ligne de commande
+- Démarrer un producer via la CLI
 
 ```bash
 kafka-console-producer --broker-list kafka:9092 --topic demo
 ```
 
-- Démarrer un consumer à l'aide de la ligne de commande
+- Démarrer un consumer via la CLI
 
 ```bash
 kafka-console-consumer --bootstrap-server kafka:9092 --topic demo --from-beginning

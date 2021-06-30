@@ -7,7 +7,7 @@
 - Docker version 19.03.15 ou supérieure (MacOSX, Linux ou Windows 10).
 - Docker Compose version 1.20.0 ou supérieure (MacOSX, Linux ou Windows 10).
 
-Vous pouvez vérifier la version de Docker et de Docker Compose que vous avez installée avec les commandes suivantes à
+Vous pouvez vérifier la version de Docker et de Docker Compose que vous avez installé avec les commandes suivantes à
 partir de votre terminal:
 
 ```shell
@@ -24,7 +24,8 @@ docker-compose --version
 
 Java 11 ou supérieure (MacOSX, Linux ou Windows 10).
 
-Vous pouvez vérifier la version de Java que vous avez installée avec les commandes suivantes à partir de votre terminal:
+Vous pouvez vérifier la version de Java que vous avez installée avec les commandes suivantes à partir de votre
+terminal :
 
 ```shell
 java --version
@@ -32,8 +33,11 @@ java --version
 
 ### Un IDE "digne de ce nom"
 
-- [VSCode](https://code.visualstudio.com/) avec les plugins nécessaires pour executer et debugger une application Java / Spring Boot, pour plus d'informations: [https://code.visualstudio.com/docs/languages/java](https://code.visualstudio.com/docs/languages/java)
-- [Intellij](https://www.jetbrains.com/fr-fr/idea/) correctement configuré pour executer et debugger une application Java / Spring Boot
+- [VSCode](https://code.visualstudio.com/) avec les plugins nécessaires pour exécuter et debugger une application Java /
+  Spring Boot, pour plus
+  d'informations : [https://code.visualstudio.com/docs/languages/java](https://code.visualstudio.com/docs/languages/java)
+- [Intellij](https://www.jetbrains.com/fr-fr/idea/) correctement configuré pour exécuter et debugger une application
+  Java / Spring Boot
 
 ### Hardware
 
@@ -53,7 +57,7 @@ git clone https://github.com/Zenika/nc-kafka-fundamentals && git checkout step01
 docker-compose up -d
 ```
 
-- Pour vérifier que l'ensemble fonctionne:
+- Pour vérifier que l'ensemble fonctionne :
 
 ```bash
 docker-compose ps 
@@ -64,7 +68,6 @@ kafka   /etc/confluent/docker/run        Up      0.0.0.0:9092->9092/tcp,:::9092-
 tools   bash -c echo Waiting for K ...   Up      9092/tcp                                
 zk      /etc/confluent/docker/run        Up      2181/tcp, 2888/tcp, 3888/tcp  
 ```
-
 
 - Exposer les conteneurs au sein de votre OS en ajoutant dans votre fichier `/etc/hosts`
 
@@ -80,22 +83,22 @@ zk      /etc/confluent/docker/run        Up      2181/tcp, 2888/tcp, 3888/tcp
 
 - Grace à cette exposition vous pouvez accéder aux différents conteneurs en utilisant les noms d'hôtes des conteneurs,
   exemple:
-    - `http://akhq:8080/` pour akhq ou précédemment vous y avez accéder avec l'url `http://localhost:8080/`
-    - `kafka:9092` pour accéder à votre broker kafka
+    - `http://akhq:8080/` pour accéder à akhq
+    - `kafka:9092` pour que vos applications ou le CLI accède à votre broker kafka
     - etc.
 
 ## Le petit mot de vos "speakers"
 
-Adrien Wattez
+**Adrien Wattez**
 
-Consultant & Formateur @ Zenika Rennes
+> Consultant & Formateur @ Zenika Rennes
 
 <img src="adrien.png" alt="adrien" width="200"/>
 
 <div style="text-align: right">
-Mickael Boixiere
+**Mickael Boixiere**
 
-Consultant & Formateur @ Zenika Rennes
+> Consultant & Formateur @ Zenika Rennes
 
 <img src="mickael.jpg" alt="mickael" width="200"/>
 </div>
@@ -107,12 +110,15 @@ Consultant & Formateur @ Zenika Rennes
 - 2012 : incubation par Apache
 - 2014 : création de Confluent
 
-Kafka est gratuit et open-source. Confluent vend des solutions d’hébergement (cloud et on-premise), des outils, du
-support et des formations.
+- Kafka est gratuit et open-source.
+
+- Confluent propose des solutions d’hébergements (cloud et on-premise), des outils (connecteurs), du support et des
+formations.
 
 ![Confluent](confluent.png)
 
-C'est pourquoi nous utilisons des images `confluentinc` durant ce workshop : `confluentinc/cp-zookeeper` et `confluentinc/cp-kafka`.
+- C'est pourquoi nous utilisons des images `confluentinc` durant ce workshop : `confluentinc/cp-zookeeper`
+et `confluentinc/cp-kafka`.
 
 ## Sommaire
 
