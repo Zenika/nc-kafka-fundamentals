@@ -37,7 +37,7 @@ java --version
 
 ### Hardware
 
-Il est nécessaire de disposer de 2 GO de RAM pour démarrer l'ensemble de la stack.
+Si possible, paramétrez un minimum de 2 GO de RAM dans docker afin de garantir une stabilité à l'ensemble de la stack.
 
 ## Setup
 
