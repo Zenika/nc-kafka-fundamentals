@@ -1,12 +1,5 @@
 # Présentation et Installation
 
-## TODO
-
-- ajout de la manip pour windows
-- ajouter un slide sur la représentation de 3 broker avec 3 partitions
-- préciser c'est quoi un segement, file system, etfc.
-- montrer avec 2 shell procuder / consumer mais aussi en mode avec un shell -> mode asynchrone
-
 ## Pré-requis
 
 ### Docker et Docker Compose
