@@ -96,6 +96,7 @@ zk      /etc/confluent/docker/run        Up      2181/tcp, 2888/tcp, 3888/tcp
 <img src="adrien.png" alt="adrien" width="200"/>
 
 <div style="text-align: right">
+
 **Mickael Boixiere**
 
 > Consultant & Formateur @ Zenika Rennes

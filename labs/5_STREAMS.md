@@ -93,7 +93,7 @@ Sink: KSTREAM-SINK-0000000002 (topic: vehicle-positions-light-avro)
 ### Démarrer votre application en local
 
 - Il s'agit d'un projet Maven qui dispose d'un wrapper `mvnw` et du plugin `spring-boot-maven-plugin`, vous pouvez
-  démarrer votre application spring en local à l'aide de la commande suivante:
+  démarrer votre application spring en local à l'aide de la commande suivante :
 
 > Se placer dans le bon répertoire `Lab05-kstream`
 

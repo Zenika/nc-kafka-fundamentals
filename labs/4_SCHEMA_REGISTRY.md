@@ -124,7 +124,7 @@ NewTopic schemaAvroTopic(){
 private final ProducerFactory<PositionKey, PositionValue> producerFactory;
 ```
 
-- Et surtout paramétrer des clés complexes pour vos `Record`:
+- Et surtout paramétrer des clés complexes pour vos `Record` :
 
 > La classe Subscriber.java
 
@@ -156,7 +156,7 @@ démarrer votre application spring en local à l'aide de la commande suivante :
 ./mvnw spring-boot:run
 ```
 
-- Visualiser la consommation des messages sur l'url suivante: [http://localhost:8092](http://localhost:8092)
+- Visualiser la consommation des messages sur l'url suivante : [http://localhost:8092](http://localhost:8092)
 
 > * Que voyez-vous sur l'IHM ?
 > * Observez les schemas AKHQ [http://akhq:8080/](http://localhost:8080/ui/server/schema) ?
