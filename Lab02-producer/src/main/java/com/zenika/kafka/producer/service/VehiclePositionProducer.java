@@ -7,12 +7,12 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 @Profile("!kafka-template")
 public class VehiclePositionProducer {
-
 
     private final ProducerFactory<String, String> producerFactory;
 
