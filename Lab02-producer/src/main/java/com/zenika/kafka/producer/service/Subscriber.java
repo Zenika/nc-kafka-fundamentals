@@ -3,6 +3,7 @@ package com.zenika.kafka.producer.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -55,9 +56,10 @@ public class Subscriber implements MqttCallback {
     }
 
     @Override
-    public void messageArrived(String topic, MqttMessage message) {
+    public void messageArrived(String queue, MqttMessage message) {
         final String value = new String(message.getPayload());
-        log.info("Message arrived: [{}] {}", topic, value);
-        // TODO write the producer code
+        log.info("Message arrived on MQTT queue: [{}] payload: {}", queue, value);
+        final ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, queue, value);
+        producer.send(record);
     }
 }

@@ -64,5 +64,6 @@ public class SubscriberWithTemplate implements MqttCallback {
 
         // No need producer record
         // Here topic is topic mqtt
+        template.send(kafkaTopic, topic, value);
     }
 }
